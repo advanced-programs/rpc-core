@@ -103,7 +103,9 @@ public class ProxyHandler extends ChannelHandlerAdapter implements InvocationHan
 		if (request.getSerialId() != -1) {
 			// 如果发生超时，那么删除请求
 			REQUESTS.remove(request.getSerialId());
-			throw new TimeoutException("在" + this.timeout + "s内未收到服务器的响应.");
+			logger.error("在 {}s 内未收到服务器的响应.", this.timeout);
+			return null;
+			//			throw new TimeoutException("在 " + this.timeout + "s 内未收到服务器的响应.");
 		} else if (request.getRsp() instanceof Exception) {
 			throw (Exception) request.getRsp();
 		}
@@ -117,7 +119,7 @@ public class ProxyHandler extends ChannelHandlerAdapter implements InvocationHan
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-		logger.error("io线程抛出一个错误:", cause);
+		logger.error("io线程抛出一个错误: {}", cause);
 		this.closeChannel();
 	}
 

@@ -1,7 +1,7 @@
 package info.hb.rpc.core.driver;
 
-import info.hb.rpc.example.StartClient;
-import info.hb.rpc.example.StartServer;
+import info.hb.rpc.example.TaskClient;
+import info.hb.rpc.example.TaskServer;
 import zx.soft.utils.driver.ProgramDriver;
 
 /**
@@ -20,8 +20,8 @@ public class RpcCoreDriver {
 		int exitCode = -1;
 		ProgramDriver pgd = new ProgramDriver();
 		try {
-			pgd.addClass("startServer", StartServer.class, "启动Server");
-			pgd.addClass("startClient", StartClient.class, "启动Client");
+			pgd.addClass("taskServer", TaskServer.class, "启动Server");
+			pgd.addClass("taskClient", TaskClient.class, "启动Client");
 			pgd.driver(args);
 			// Success
 			exitCode = 0;

@@ -18,13 +18,18 @@
 		<dependency>
 			<groupId>zx.soft</groupId>
 			<artifactId>common-utils</artifactId>
-			<version>2.0.0</version>
+			<version>2.0.0-develop-jdk8</version>
 			<exclusions>
 				<exclusion>
 					<groupId>com.typesafe.akka</groupId>
 					<artifactId>akka-actor</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<!-- Redis客户端 -->
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
 		</dependency>
 		<!-- Akka Actor包 -->
 		<dependency>
@@ -92,6 +97,7 @@
 					<excludes>
 						<exclude>logback.xml</exclude>
 						<exclude>conf.properties</exclude>
+						<exclude>redis.properties</exclude>
 						<exclude>rpc.properties</exclude>
 					</excludes>
 				</configuration>

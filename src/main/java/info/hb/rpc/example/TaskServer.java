@@ -10,19 +10,19 @@ import org.slf4j.LoggerFactory;
 import zx.soft.utils.config.ConfigUtil;
 import zx.soft.utils.log.LogbackUtil;
 
-public class StartServer {
+public class TaskServer {
 
-	private static Logger logger = LoggerFactory.getLogger(StartServer.class);
+	private static Logger logger = LoggerFactory.getLogger(TaskServer.class);
 
 	private int port;
 
-	public StartServer() {
+	public TaskServer() {
 		Properties props = ConfigUtil.getProps("rpc.properties");
 		port = Integer.parseInt(props.getProperty("server.port"));
 	}
 
 	public static void main(String[] args) throws Exception {
-		StartServer start = new StartServer();
+		TaskServer start = new TaskServer();
 		start.run();
 	}
 
