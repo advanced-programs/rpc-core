@@ -1,17 +1,11 @@
 package info.hb.rpc.example;
 
-import info.hb.rpc.core.domain.QpsAndTps;
-import info.hb.rpc.core.redis.RedisClient;
-
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import zx.soft.utils.json.JsonUtils;
 import zx.soft.utils.log.LogbackUtil;
 
 public class TaskImpl implements Task {
@@ -26,12 +20,6 @@ public class TaskImpl implements Task {
 	// 起始时间，秒
 	private static long startTime = System.currentTimeMillis() / 1000L;
 
-	// 存放1秒之内的请求次数和请求字节大小，实时更新
-	private static final List<QpsAndTps> QPS_TPS = new ArrayList<>();
-
-	private static final RedisClient REDIS_CLIENT = new RedisClient();
-	private static final String KEY = "cache-qps-tps";
-
 	static {
 		Thread thread = new Thread(new Runnable() {
 
@@ -44,15 +32,11 @@ public class TaskImpl implements Task {
 						if (timeSpan == 0L) {
 							timeSpan = 1L;
 						}
+						// 次/s
 						long qps = REQUEST_COUNT.get() / timeSpan;
+						// MB/s
 						long tps = REQUEST_BYTE.get() / (timeSpan * 1_000_000);
-						// 保存数据
-						QPS_TPS.clear(); // 清空数据
-						QPS_TPS.add(new QpsAndTps(qps, tps));
-						// 写入Redis中
-						REDIS_CLIENT.deleteKey(KEY); // 清空数据
-						REDIS_CLIENT.addRecord(KEY, JsonUtils.toJsonWithoutPretty(QPS_TPS));
-						logger.info("QPS: {}  ,  TPS: {}.", QPS_TPS.get(0).getQps(), QPS_TPS.get(0).getTps());
+						logger.info("QPS: {}  ,  TPS: {}.", qps, tps);
 					} catch (InterruptedException e) {
 						logger.error("Exception: {}", LogbackUtil.expection2Str(e));
 					}
