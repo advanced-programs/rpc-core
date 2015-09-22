@@ -44,8 +44,8 @@ public class TaskImpl implements Task {
 						if (timeSpan == 0L) {
 							timeSpan = 1L;
 						}
-						double qps = (float) REQUEST_COUNT.get() / (float) timeSpan;
-						double tps = (float) REQUEST_BYTE.get() / (float) timeSpan;
+						long qps = REQUEST_COUNT.get() / timeSpan;
+						long tps = REQUEST_BYTE.get() / (timeSpan * 1_000_000);
 						// 保存数据
 						QPS_TPS.clear(); // 清空数据
 						QPS_TPS.add(new QpsAndTps(qps, tps));

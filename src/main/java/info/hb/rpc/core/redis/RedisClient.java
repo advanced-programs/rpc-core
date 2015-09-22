@@ -3,6 +3,7 @@ package info.hb.rpc.core.redis;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -188,6 +189,26 @@ public class RedisClient {
 				jedis = null;
 			}
 			return Boolean.FALSE;
+		} finally {
+			if (jedis != null && jedis.isConnected())
+				pool.returnResource(jedis);
+		}
+	}
+
+	public Set<String> smembers(String key) {
+		Jedis jedis = getJedis();
+		if (jedis == null) {
+			return null;
+		}
+		try {
+			return jedis.smembers(key);
+		} catch (Exception e) {
+			logger.error("Exception:{}", LogbackUtil.expection2Str(e));
+			if (jedis != null) {
+				pool.returnBrokenResource(jedis);
+				jedis = null;
+			}
+			return null;
 		} finally {
 			if (jedis != null && jedis.isConnected())
 				pool.returnResource(jedis);
